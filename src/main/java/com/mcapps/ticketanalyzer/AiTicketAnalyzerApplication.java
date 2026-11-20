@@ -1,4 +1,4 @@
-package com.mcapps.ai_ticket_analyzer;
+package com.mcapps.ticketanalyzer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

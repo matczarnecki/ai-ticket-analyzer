@@ -1,4 +1,4 @@
-package com.mcapps.ai_ticket_analyzer;
+package com.mcapps.ticketanalyzer;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
