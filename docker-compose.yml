@@ -8,5 +8,22 @@ services:
       - ollama_data:/root/.ollama
     restart: unless-stopped
 
+  postgres:
+    image: pgvector/pgvector:pg18-trixie
+    environment:
+      POSTGRES_DB: ticket_analyzer
+      POSTGRES_USER: ticket_analyzer
+      POSTGRES_PASSWORD: local_dev_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - ticket-analyzer-postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ticket_analyzer -d ticket_analyzer"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
 volumes:
   ollama_data:
+  ticket-analyzer-postgres-data:
