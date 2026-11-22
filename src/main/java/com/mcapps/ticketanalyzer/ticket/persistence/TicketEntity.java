@@ -1,4 +1,4 @@
-package com.mcapps.ticketanalyzer.ticket.persistance;
+package com.mcapps.ticketanalyzer.ticket.persistence;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
