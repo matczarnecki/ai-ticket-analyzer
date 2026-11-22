@@ -1,0 +1,43 @@
+
+databaseChangeLog:
+  - changeSet:
+      id: 2-add-ticket-analysis
+      author: mcapps
+      changes:
+        - addColumn:
+            tableName: tickets
+            columns:
+              - column:
+                  name: status
+                  type: TEXT
+                  defaultValue: NEW
+                  constraints:
+                    nullable: false
+
+              - column:
+                  name: title
+                  type: TEXT
+
+              - column:
+                  name: category
+                  type: TEXT
+
+              - column:
+                  name: severity
+                  type: TEXT
+
+              - column:
+                  name: summary
+                  type: TEXT
+
+              - column:
+                  name: missing_information
+                  type: JSONB
+
+              - column:
+                  name: suggested_team
+                  type: TEXT
+
+              - column:
+                  name: analyzed_at
+                  type: TIMESTAMP WITH TIME ZONE
