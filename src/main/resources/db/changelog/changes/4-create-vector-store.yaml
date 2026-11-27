@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - changeSet:
+      id: 4-create-vector-store
+      author: mcapps
+      changes:
+        - sql:
+            sql: CREATE EXTENSION IF NOT EXISTS hstore
+        - sql:
+            sql: 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp"'
+        - sql:
+            sql: |
+              CREATE TABLE public.vector_store (
+                  id uuid DEFAULT uuid_generate_v4() PRIMARY KEY,
+                  content text,
+                  metadata json,
+                  embedding vector(1024)
+              )
+        - sql:
+            sql: CREATE INDEX IF NOT EXISTS spring_ai_vector_index ON public.vector_store USING HNSW (embedding vector_cosine_ops)
