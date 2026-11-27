@@ -47,10 +47,20 @@ class RetrievedContextChatIntegrationTest {
 
     private static final String QUESTION = "What is the name of the password reset mailbox?";
 
+    private static final String UNKNOWN_QUESTION = "Where does the nightly database backup go?";
+
     private static final String SYSTEM_PROMPT = """
         Answer the question using only the context in the user message.
         Copy names exactly as they appear in the context.
         If the context does not contain the answer, reply exactly: I do not know.
+        Do not use outside knowledge.
+        """;
+
+    private static final String UNKNOWN_SYSTEM_PROMPT = """
+        Answer the question using only the context in the user message.
+        Copy names exactly as they appear in the context.
+        If the context does not contain the answer, the whole reply is these three words and no other characters:
+        I do not know
         Do not use outside knowledge.
         """;
 
@@ -132,5 +142,53 @@ class RetrievedContextChatIntegrationTest {
             .content();
 
         assertThat(answer).contains(MAILBOX);
+    }
+
+    @Test
+    void saysItDoesNotKnowWhenTheSelectedChunkHasNoAnswer() {
+        String context = selectedMailboxChunk();
+
+        String unknown = chatClient
+            .prompt()
+            .system(UNKNOWN_SYSTEM_PROMPT)
+            .user(user -> user
+                .text(USER_PROMPT)
+                .param("context", context)
+                .param("question", UNKNOWN_QUESTION))
+            .call()
+            .content();
+
+        assertThat(unknown).isEqualTo("I do not know");
+    }
+
+    private String selectedMailboxChunk() {
+        String parentId = UUID.randomUUID().toString();
+        Document source = Document.builder()
+            .id(parentId)
+            .text(PASSAGE)
+            .metadata("source", "retrieved-context-lesson")
+            .build();
+
+        TokenTextSplitter splitter = TokenTextSplitter.builder()
+            .withChunkSize(20)
+            .withChunkOverlap(0)
+            .withMinChunkSizeChars(40)
+            .build();
+
+        List<Document> chunks = splitter.split(source);
+        chunkIds = chunks.stream().map(Document::getId).toList();
+        vectorStore.add(chunks);
+
+        List<Document> matches = vectorStore.similaritySearch(SearchRequest.builder()
+            .query(QUESTION)
+            .topK(1)
+            .build());
+
+        assertThat(matches).singleElement().satisfies(match -> {
+            assertThat(match.getText()).contains(MAILBOX);
+            assertThat(match.getText()).doesNotContain("offsite vault");
+            assertThat(match.getScore()).isNotNull().isGreaterThan(0.5);
+        });
+        return matches.getFirst().getText();
     }
 }
