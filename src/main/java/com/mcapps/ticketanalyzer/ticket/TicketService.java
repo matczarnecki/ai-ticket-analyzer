@@ -48,7 +48,15 @@ public class TicketService {
         return new TicketResponse(
             ticket.getId(),
             ticket.getDescription(),
-            ticket.getCreatedAt()
+            ticket.getCreatedAt(),
+            ticket.getStatus(),
+            ticket.getTitle(),
+            ticket.getCategory(),
+            ticket.getSeverity(),
+            ticket.getSummary(),
+            ticket.getMissingInformation(),
+            ticket.getSuggestedTeam(),
+            ticket.getAnalyzedAt()
         );
     }
 }

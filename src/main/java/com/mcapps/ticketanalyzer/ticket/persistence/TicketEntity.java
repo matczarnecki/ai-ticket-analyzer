@@ -123,4 +123,36 @@ public class TicketEntity {
     public OffsetDateTime getAnalyzedAt() {
         return analyzedAt;
     }
+
+    public void setStatus(TicketStatus status) {
+        this.status = status;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setCategory(TicketCategory category) {
+        this.category = category;
+    }
+
+    public void setSeverity(TicketSeverity severity) {
+        this.severity = severity;
+    }
+
+    public void setSummary(String summary) {
+        this.summary = summary;
+    }
+
+    public void setMissingInformation(List<String> missingInformation) {
+        this.missingInformation = missingInformation;
+    }
+
+    public void setSuggestedTeam(SuggestedTeam suggestedTeam) {
+        this.suggestedTeam = suggestedTeam;
+    }
+
+    public void setAnalyzedAt(OffsetDateTime analyzedAt) {
+        this.analyzedAt = analyzedAt;
+    }
 }

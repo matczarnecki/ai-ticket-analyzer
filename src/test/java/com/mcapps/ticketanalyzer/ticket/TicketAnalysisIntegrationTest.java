@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @Tag("integration")
-@SpringBootTest
+@SpringBootTest(properties = "app.ticket-analysis.fixed-delay=1h")
 class TicketAnalysisIntegrationTest {
 
     @Autowired

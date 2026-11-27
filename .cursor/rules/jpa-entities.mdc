@@ -1,0 +1,31 @@
+---
+description: Encje JPA trzymają tylko dane; logika zostaje w serwisach
+globs: "**/*Entity.java"
+alwaysApply: false
+---
+
+# Encje JPA bez logiki
+
+Klasa z `@Entity` jest prostym obiektem z danymi. Mapowanie, pola, konstruktor bezargumentowy, konstruktory przypisujące pola oraz gettery i settery są w encji. Decyzje domenowe zostają w serwisie.
+
+W encji nie dodawaj reguł biznesowych, przejść statusu, walidacji domenowej, wywołań innych beanów ani metod, które liczą albo zmieniają stan na podstawie innych pól.
+
+```java
+// ❌ BAD — decyzja domenowa w encji
+public void analyze(AnalysisResult result) {
+    this.status = TicketStatus.ANALYZED;
+    this.severity = result.severity();
+}
+
+// ✅ GOOD — encja tylko przyjmuje wartości
+public void setStatus(TicketStatus status) {
+    this.status = status;
+}
+
+// ✅ GOOD — serwis podejmuje decyzję i zapisuje dane
+ticket.setStatus(TicketStatus.ANALYZED);
+ticket.setSeverity(result.severity());
+ticketRepository.save(ticket);
+```
+
+`@PrePersist` / `@PreUpdate` mogą tylko uzupełnić pola techniczne, na przykład `createdAt`, gdy jest puste.

@@ -6,6 +6,17 @@ services:
       - "11434:11434"
     volumes:
       - ollama_data:/root/.ollama
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        ollama serve &
+        server_pid=$$!
+        until ollama list >/dev/null 2>&1; do
+          sleep 2
+        done
+        ollama show qwen3:8b >/dev/null 2>&1 || ollama pull qwen3:8b
+        ollama show mxbai-embed-large >/dev/null 2>&1 || ollama pull mxbai-embed-large
+        wait $$server_pid
     restart: unless-stopped
 
   postgres:
