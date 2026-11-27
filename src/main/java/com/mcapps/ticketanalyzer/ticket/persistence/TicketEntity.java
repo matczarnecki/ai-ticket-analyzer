@@ -45,21 +45,21 @@ public class TicketEntity {
     private OffsetDateTime createdAt;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 30)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private TicketStatus status;
 
-    @Column(length = 120)
+    @Column(columnDefinition = "TEXT")
     private String title;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 50)
+    @Column(columnDefinition = "TEXT")
     private TicketCategory category;
 
     @Enumerated(EnumType.STRING)
-    @Column(length = 50)
+    @Column(columnDefinition = "TEXT")
     private TicketSeverity severity;
 
-    @Column(length = 1000)
+    @Column(columnDefinition = "TEXT")
     private String summary;
 
     @JdbcTypeCode(SqlTypes.JSON)
@@ -67,7 +67,7 @@ public class TicketEntity {
     private List<String> missingInformation;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "suggested_team", length = 50)
+    @Column(name = "suggested_team", columnDefinition = "TEXT")
     private SuggestedTeam suggestedTeam;
 
     @Column(name = "analyzed_at")
